@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   children: [
                     MyGauge(
-                        value: avgHrValue,
+                        value: globals.avgHrValue,
                         name: 'BPM',
                         redStart: 0,
                         redEnd: 60,
@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         minimumValue: 0,
                         maximumValue: 200),
                     MyGauge(
-                        value: sbpValue,
+                        value: globals.sbpValue,
                         name: 'SBP',
                         redStart: 0,
                         redEnd: 90,
@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   children: [
                     MyGauge(
-                        value: dbpValue,
+                        value: globals.dbpValue,
                         name: 'DBP',
                         redStart: 0,
                         redEnd: 60,
