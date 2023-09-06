@@ -9,6 +9,7 @@ import 'dart:math';
 
 import 'dependency_injection.dart';
 import 'widgets/gauge.dart';
+import 'widgets/thermometer.dart';
 import 'helpers/get_data.dart';
 import 'helpers/refresh_data.dart';
 import 'global/globals.dart' as globals;
@@ -175,6 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         maximumValue: 100),
                   ],
                 ),
+                MyThermometer(value: globals.tempValue),
+                SizedBox(height: 20),
                 SfCartesianChart(
                   tooltipBehavior: TooltipBehavior(enable: true),
                   legend:

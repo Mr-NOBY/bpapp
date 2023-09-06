@@ -6,7 +6,8 @@ double hrValue = 0;
 double sbpValue = 0;
 double dbpValue = 0;
 double avgHrValue = 0;
-double spo2Value = 0;
+double spo2Value = 95;
+double tempValue = 36.7;
 List<HRData> hrData = [];
 
 late InfluxDBClient influxDBClient;
