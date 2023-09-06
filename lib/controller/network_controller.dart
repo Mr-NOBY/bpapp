@@ -1,3 +1,5 @@
+import 'package:bpapp/helpers/get_data.dart';
+import 'package:bpapp/helpers/refresh_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,7 @@ import 'dart:io';
 
 class NetworkController extends GetxController {
   final Connectivity _connectivity = Connectivity();
+  // var myWidget = MyWidgetState();
 
   @override
   void onInit() {
@@ -53,6 +56,7 @@ class NetworkController extends GetxController {
       } else if (connected == true) {
         if (Get.isSnackbarOpen) {
           Get.closeCurrentSnackbar();
+          refreshData();
         }
       }
       return connected;

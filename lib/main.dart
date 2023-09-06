@@ -3,12 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:influxdb_client/api.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:async';
 import 'dart:math';
 
 import 'dependency_injection.dart';
+import 'widgets/gauge.dart';
+import 'helpers/get_data.dart';
+import 'helpers/refresh_data.dart';
+import 'global/globals.dart' as globals;
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -44,151 +47,61 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double _hrValue = 0;
-  double _sbpValue = 0;
-  double _dbpValue = 0;
-  double _avgHrValue = 0;
-  List<HRData> _hrData = [];
+  double hrValue = 0.0;
+  double sbpValue = 0.0;
+  double dbpValue = 0.0;
+  double avgHrValue = 0.0;
+  List<globals.HRData> hrData = [];
 
-  late InfluxDBClient _influxDBClient;
+  Future<void> setstate() async {
+    setState(() {
+      avgHrValue = globals.avgHrValue;
+    });
+    setState(() {
+      sbpValue = globals.sbpValue;
+    });
+    setState(() {
+      dbpValue = globals.dbpValue;
+    });
+    setState(() {
+      hrData = globals.hrrData;
+    });
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        setstate();
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    _influxDBClient = InfluxDBClient(
+
+    globals.influxDBClient = InfluxDBClient(
       url: 'https://us-east-1-1.aws.cloud2.influxdata.com',
       token:
           '-g6iC2cK-mwZpYCPaiKdDOyyX5P1vkncIDSigkxs_ImaQJUDUm1-87FX4peKEmW4F2DC9CMSqZKVVTLNvXERSg==',
       org: 'test',
       bucket: 'colabtest',
     );
-    _getData();
-  }
-
-  List<HRData> hrData = [];
-  List avgHr = [];
-
-  Future<void> refreshData() async {
-    // Close the existing InfluxDB client
-    _influxDBClient.close();
-
-    // Create a new InfluxDB client to reestablish the connection
-    _influxDBClient = InfluxDBClient(
-      url: 'https://us-east-1-1.aws.cloud2.influxdata.com',
-      token:
-          '-g6iC2cK-mwZpYCPaiKdDOyyX5P1vkncIDSigkxs_ImaQJUDUm1-87FX4peKEmW4F2DC9CMSqZKVVTLNvXERSg==',
-      org: 'test',
-      bucket: 'colabtest',
-    );
-
-    // Refresh data
-    _getData();
-  }
-
-  void _getData() async {
-    var queryApi = _influxDBClient.getQueryService();
-    var queryHr = "from(bucket: \"colabtest\") "
-        "|> range(start: -72h) "
-        "|> filter(fn: (r) => r._measurement == \"acchr\")"
-        "|> filter(fn: (r) => r._field == \"acchr\" ) "
-        "|> last()";
-    var querylast8 = "from(bucket: \"colabtest\") "
-        "|> range(start: -72h) "
-        "|> filter(fn: (r) => r._measurement == \"acchr\")"
-        "|> filter(fn: (r) => r._field == \"acchr\" ) "
-        "|> tail(n: 8)"
-        "|> sort(columns: [\"_time\"])";
-    var resultHr = await queryApi.query(queryHr);
-    if (avgHr.length < 8) {
-      resultHr = await queryApi.query(querylast8);
-    } else {
-      resultHr = await queryApi.query(queryHr);
-    }
-    await for (var record in resultHr) {
-      if (record['_field'] == 'acchr') {
-        // Timer.periodic(Duration(seconds: 3), (timer) {
-        setState(() {
-          //_hrValue = (record['_value']).toDouble();
-          _hrData = hrData;
-          print(_hrValue);
-        });
-        // });
-        hrData.add(HRData(
-            record['_value'].toDouble(), DateTime.parse(record['_time'])));
-        avgHr.add(_hrValue);
-      }
-
-      var queryavgHr = "from(bucket: \"colabtest\") "
-          "|> range(start: -72h) "
-          "|> filter(fn: (r) => r._measurement == \"acchr\")"
-          "|> filter(fn: (r) => r._field == \"avghr\") "
-          "|> last()";
-      var resultavgHr = await queryApi.query(queryavgHr);
-      await for (var record in resultavgHr) {
-        if (record['_field'] == 'avghr') {
-          Timer.periodic(Duration(seconds: 5), (timer) {
-            setState(() {
-              _avgHrValue = (record['_value']).toDouble();
-            });
-          });
-        }
-      }
-
-      var querySbp = "from(bucket: \"colabtest\") "
-          "|> range(start: -72h) "
-          "|> filter(fn: (r) => r._measurement == \"acchr\")"
-          "|> filter(fn: (r) => r._field == \"sbp\") "
-          "|> last()";
-      var resultSbp = await queryApi.query(querySbp);
-      await for (var record in resultSbp) {
-        if (record['_field'] == 'sbp') {
-          Timer.periodic(Duration(seconds: 5), (timer) {
-            setState(() {
-              _sbpValue = (record['_value']).toDouble();
-            });
-          });
-        }
-
-        var queryDbp = "from(bucket: \"colabtest\") "
-            "|> range(start: -72h) "
-            "|> filter(fn: (r) => r._measurement == \"acchr\")"
-            "|> filter(fn: (r) => r._field == \"dbp\" ) "
-            "|> last()";
-        var resultDbp = await queryApi.query(queryDbp);
-        await for (var record in resultDbp) {
-          if (record['_field'] == 'dbp') {
-            Timer.periodic(Duration(seconds: 5), (timer) {
-              setState(() {
-                _dbpValue = (record['_value']).toDouble();
-              });
-            });
-          }
-        }
-      }
-
-      Future.delayed(
-        const Duration(seconds: 3),
-        () {
-          _getData();
-        },
-      );
-    }
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
+    setstate();
     double avghr;
-    avgHr.remove(0.0);
+    globals.avgHr.remove(0.0);
 
-    if (avgHr.length >= 8) {
-      if (avgHr.elementAt(avgHr.length - 1) == avgHr.last) {
-        avgHr.removeLast();
+    if (globals.avgHr.length >= 8) {
+      if (globals.avgHr.elementAt(globals.avgHr.length - 1) ==
+          globals.avgHr.last) {
+        globals.avgHr.removeLast();
       }
-      avghr = avgHr.reduce((a, b) => a + b) / avgHr.length;
-      print(avghr);
-      print(avgHr);
+      avghr = globals.avgHr.reduce((a, b) => a + b) / globals.avgHr.length;
     } else {
-      avghr = _hrValue;
+      avghr = globals.hrValue;
     }
 
     return Scaffold(
@@ -204,289 +117,49 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Row(
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.33,
-                      child: SfRadialGauge(
-                        enableLoadingAnimation: true,
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 200,
-                            radiusFactor: 0.85,
-                            ranges: <GaugeRange>[
-                              GaugeRange(
-                                startValue: 0,
-                                endValue: 60,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 60,
-                                endValue: 100,
-                                color: Colors.orange,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 100,
-                                endValue: 160,
-                                color: Colors.green,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 160,
-                                endValue: 200,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                            ],
-                            pointers: <GaugePointer>[
-                              MarkerPointer(
-                                value: _avgHrValue,
-                                animationType: AnimationType.ease,
-                                animationDuration: 1000,
-                                enableAnimation: true,
-                                markerWidth: 20,
-                                markerOffset: -10,
-                                color: Colors.blueGrey,
-                              ),
-                              RangePointer(
-                                value: _avgHrValue,
-                                enableAnimation: true,
-                                animationDuration: 1000,
-                                animationType: AnimationType.ease,
-                                dashArray: const [8, 2],
-                                color: Color.fromRGBO(220, 220, 220, 70),
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  widget: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          ((_avgHrValue).round()).toString(),
-                                          style: TextStyle(
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "BPM",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color:
-                                                Color.fromARGB(255, 52, 52, 52),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  angle: 90,
-                                  positionFactor: 0.75),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.33,
-                      child: SfRadialGauge(
-                        enableLoadingAnimation: true,
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 200,
-                            radiusFactor: 0.85,
-                            ranges: <GaugeRange>[
-                              GaugeRange(
-                                startValue: 0,
-                                endValue: 90,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 90,
-                                endValue: 120,
-                                color: Colors.orange,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 120,
-                                endValue: 140,
-                                color: Colors.green,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 140,
-                                endValue: 200,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                            ],
-                            pointers: <GaugePointer>[
-                              MarkerPointer(
-                                value: _sbpValue,
-                                animationType: AnimationType.ease,
-                                animationDuration: 1000,
-                                enableAnimation: true,
-                                markerWidth: 20,
-                                markerOffset: -10,
-                                color: Colors.blueGrey,
-                              ),
-                              RangePointer(
-                                value: _sbpValue,
-                                enableAnimation: true,
-                                animationDuration: 1000,
-                                animationType: AnimationType.ease,
-                                dashArray: const [8, 2],
-                                color: Color.fromRGBO(220, 220, 220, 70),
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  widget: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          ((_sbpValue).round()).toString(),
-                                          style: TextStyle(
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "SBP",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color:
-                                                Color.fromARGB(255, 52, 52, 52),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  angle: 90,
-                                  positionFactor: 0.75),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    MyGauge(
+                        value: avgHrValue,
+                        name: 'BPM',
+                        redStart: 0,
+                        redEnd: 60,
+                        orangeStart: 60,
+                        orangeEnd: 100,
+                        greenStart: 100,
+                        greenEnd: 160,
+                        secondRedStart: 160,
+                        secondRedEnd: 200,
+                        minimumValue: 0,
+                        maximumValue: 200),
+                    MyGauge(
+                        value: sbpValue,
+                        name: 'SBP',
+                        redStart: 0,
+                        redEnd: 90,
+                        orangeStart: 90,
+                        orangeEnd: 120,
+                        greenStart: 120,
+                        greenEnd: 140,
+                        secondRedStart: 140,
+                        secondRedEnd: 200,
+                        minimumValue: 0,
+                        maximumValue: 200),
                   ],
                 ),
                 Row(
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.33,
-                      child: SfRadialGauge(
-                        enableLoadingAnimation: true,
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 200,
-                            radiusFactor: 0.85,
-                            ranges: <GaugeRange>[
-                              GaugeRange(
-                                startValue: 0,
-                                endValue: 60,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 60,
-                                endValue: 80,
-                                color: Colors.orange,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 80,
-                                endValue: 90,
-                                color: Colors.green,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                              GaugeRange(
-                                startValue: 90,
-                                endValue: 200,
-                                color: Colors.red,
-                                startWidth: 20,
-                                endWidth: 20,
-                              ),
-                            ],
-                            pointers: <GaugePointer>[
-                              MarkerPointer(
-                                value: _dbpValue,
-                                animationType: AnimationType.ease,
-                                animationDuration: 1000,
-                                enableAnimation: true,
-                                markerWidth: 20,
-                                markerOffset: -10,
-                                color: Colors.blueGrey,
-                              ),
-                              RangePointer(
-                                value: _dbpValue,
-                                enableAnimation: true,
-                                animationDuration: 1000,
-                                animationType: AnimationType.ease,
-                                dashArray: const [8, 2],
-                                color: Color.fromRGBO(220, 220, 220, 70),
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  widget: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          ((_dbpValue).round()).toString(),
-                                          style: TextStyle(
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "DBP",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color:
-                                                Color.fromARGB(255, 52, 52, 52),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  angle: 90,
-                                  positionFactor: 0.75),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    MyGauge(
+                        value: dbpValue,
+                        name: 'DBP',
+                        redStart: 0,
+                        redEnd: 60,
+                        orangeStart: 60,
+                        orangeEnd: 80,
+                        greenStart: 80,
+                        greenEnd: 90,
+                        secondRedStart: 90,
+                        secondRedEnd: 200,
+                        minimumValue: 0,
+                        maximumValue: 200),
                   ],
                 ),
                 SfCartesianChart(
@@ -502,12 +175,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: AxisTitle(text: 'Time'),
                   ),
                   series: <ChartSeries>[
-                    SplineSeries<HRData, DateTime>(
+                    SplineSeries<globals.HRData, DateTime>(
                         name: 'Heart Rate',
-                        dataSource: _hrData.sublist(max(0, _hrData.length - 8)),
-                        xValueMapper: (HRData data, _) => data.time,
+                        dataSource: globals.hrrData
+                            .sublist(max(0, globals.hrrData.length - 8)),
+                        xValueMapper: (globals.HRData data, _) => data.time,
                         xAxisName: 'Time',
-                        yValueMapper: (HRData data, _) => data.value,
+                        yValueMapper: (globals.HRData data, _) => data.value,
                         yAxisName: 'BPM')
                   ],
                   zoomPanBehavior: ZoomPanBehavior(
@@ -523,11 +197,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
-
-class HRData {
-  final double value;
-  final DateTime time;
-
-  HRData(this.value, this.time);
 }
