@@ -118,19 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   children: [
                     MyGauge(
-                        value: globals.avgHrValue,
-                        name: 'BPM',
-                        redStart: 0,
-                        redEnd: 60,
-                        orangeStart: 60,
-                        orangeEnd: 100,
-                        greenStart: 100,
-                        greenEnd: 160,
-                        secondRedStart: 160,
-                        secondRedEnd: 200,
-                        minimumValue: 0,
-                        maximumValue: 200),
-                    MyGauge(
                         value: globals.sbpValue,
                         name: 'SBP',
                         redStart: 0,
@@ -143,10 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         secondRedEnd: 200,
                         minimumValue: 0,
                         maximumValue: 200),
-                  ],
-                ),
-                Row(
-                  children: [
                     MyGauge(
                         value: globals.dbpValue,
                         name: 'DBP',
@@ -160,6 +143,36 @@ class _MyHomePageState extends State<MyHomePage> {
                         secondRedEnd: 200,
                         minimumValue: 0,
                         maximumValue: 200),
+                  ],
+                ),
+                Row(
+                  children: [
+                    MyGauge(
+                        value: globals.avgHrValue,
+                        name: 'BPM',
+                        redStart: 0,
+                        redEnd: 60,
+                        orangeStart: 60,
+                        orangeEnd: 100,
+                        greenStart: 100,
+                        greenEnd: 160,
+                        secondRedStart: 160,
+                        secondRedEnd: 200,
+                        minimumValue: 0,
+                        maximumValue: 200),
+                    MyGauge(
+                        value: globals.spo2Value,
+                        name: 'SpO2',
+                        redStart: 0,
+                        redEnd: 90,
+                        orangeStart: 90,
+                        orangeEnd: 95,
+                        greenStart: 95,
+                        greenEnd: 100,
+                        secondRedStart: 100,
+                        secondRedEnd: 100,
+                        minimumValue: 0,
+                        maximumValue: 100),
                   ],
                 ),
                 SfCartesianChart(
