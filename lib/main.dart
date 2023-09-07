@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
     );
 
     return GetMaterialApp(
+      defaultTransition: Transition.leftToRightWithFade,
+      transitionDuration: const Duration(milliseconds: 500),
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: blackSwatch,

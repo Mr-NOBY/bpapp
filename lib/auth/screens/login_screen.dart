@@ -1,3 +1,4 @@
+import 'package:bpapp/auth/screens/forgot_password_screen.dart';
 import 'package:bpapp/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,7 +57,8 @@ class LoginScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                              onPressed: () {},
+                              onPressed: () =>
+                                  Get.to(() => const ForgotPasswordScreen()),
                               child: const Text('Forgot Password?')),
                         ),
                         SizedBox(
