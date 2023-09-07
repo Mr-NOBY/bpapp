@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
 
+import 'package:bpapp/auth/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:influxdb_client/api.dart';
@@ -26,12 +27,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MaterialColor blackSwatch = MaterialColor(
+      Colors.black.value,
+      <int, Color>{
+        50: Colors.black.withOpacity(0.1),
+        100: Colors.black.withOpacity(0.2),
+        200: Colors.black.withOpacity(0.3),
+        300: Colors.black.withOpacity(0.4),
+        400: Colors.black.withOpacity(0.5),
+        500: Colors.black.withOpacity(0.6),
+        600: Colors.black.withOpacity(0.7),
+        700: Colors.black.withOpacity(0.8),
+        800: Colors.black.withOpacity(0.9),
+        900: Colors.black.withOpacity(1),
+      },
+    );
+
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: blackSwatch,
+        fontFamily: 'Cairo',
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: WelcomeScreen(),
     );
   }
 }
