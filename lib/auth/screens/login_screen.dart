@@ -67,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              Get.to(() => MyHomePage(title: 'App Name'));
+                              Get.to(() => MyHomePage(title: 'Smart BioChip'));
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(),

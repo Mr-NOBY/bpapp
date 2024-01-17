@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       defaultTransition: Transition.leftToRightWithFade,
       transitionDuration: const Duration(milliseconds: 500),
-      title: 'Flutter Demo',
+      title: 'Smart BioChip',
       theme: ThemeData(
         primarySwatch: blackSwatch,
         fontFamily: 'Cairo',
@@ -128,7 +128,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        leading: const Icon(
+          Icons.menu,
+          color: Colors.black,
+        ),
+        title: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 20, top: 7),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[200]),
+            child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.person_rounded,
+                  color: Colors.black,
+                )),
+          )
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: refreshData,
