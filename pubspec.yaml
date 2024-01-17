@@ -43,6 +43,7 @@ dependencies:
   get: ^4.6.5
   connectivity_plus: ^4.0.2
   internet_connection_checker: ^1.0.0+1
+  flutter_otp_text_field: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
   assets:
     - assets/images/google.png
     - assets/images/reset.png
+    - assets/images/otp.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

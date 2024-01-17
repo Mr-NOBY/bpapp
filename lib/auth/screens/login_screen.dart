@@ -3,6 +3,8 @@ import 'package:bpapp/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../main.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   @override
@@ -64,7 +66,9 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(() => MyHomePage(title: 'App Name'));
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(),
                               side: const BorderSide(color: Colors.black),

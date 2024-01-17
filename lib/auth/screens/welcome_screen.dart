@@ -10,7 +10,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  "App Name",
+                  "Smart BIOChip",
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Text(
@@ -33,10 +33,10 @@ class WelcomeScreen extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(),
+                      shape: const RoundedRectangleBorder(),
                       foregroundColor: Colors.black,
-                      side: BorderSide(color: Colors.black),
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      side: const BorderSide(color: Colors.black),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                     ),
                     onPressed: () => Get.to(() => const LoginScreen()),
                     child: const Text("LOGIN"),
@@ -48,10 +48,10 @@ class WelcomeScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(),
+                      shape: const RoundedRectangleBorder(),
                       backgroundColor: Colors.black,
-                      side: BorderSide(color: Colors.black),
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      side: const BorderSide(color: Colors.black),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       elevation: 0,
                     ),
                     onPressed: () => Get.to(() => const SignupScreen()),

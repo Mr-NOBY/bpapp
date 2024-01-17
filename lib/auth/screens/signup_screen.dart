@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'login_screen.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -118,7 +117,7 @@ class SignupScreen extends StatelessWidget {
                                       fontSize: 15),
                                   children: [
                                     TextSpan(
-                                      text: ' LOGIN',
+                                      text: ' Login',
                                       style: TextStyle(
                                         color: Colors.blue,
                                         fontSize: 15,

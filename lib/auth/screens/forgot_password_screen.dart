@@ -1,4 +1,6 @@
+import './otp_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -51,7 +53,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => const OtpScreen());
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: const RoundedRectangleBorder(),
                       side: const BorderSide(color: Colors.black),

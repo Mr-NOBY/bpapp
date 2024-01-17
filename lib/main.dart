@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: blackSwatch,
         fontFamily: 'Cairo',
       ),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: MyHomePage(title: 'App Name'),
       home: WelcomeScreen(),
     );
   }
