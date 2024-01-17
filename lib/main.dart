@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
 
 import 'package:bpapp/auth/screens/welcome_screen.dart';
+import 'package:bpapp/firebase_options.dart';
+import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:influxdb_client/api.dart';
@@ -16,6 +19,9 @@ import 'helpers/refresh_data.dart';
 import 'global/globals.dart' as globals;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) => Get.put(AuthRepo()));
   runApp(const MyApp());
   DependencyInjection.init();
 }
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Cairo',
       ),
       //home: MyHomePage(title: 'App Name'),
-      home: WelcomeScreen(),
+      home: const CircularProgressIndicator(),
     );
   }
 }
@@ -146,7 +152,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.grey[200]),
             child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  AuthRepo.instance.logout();
+                },
                 icon: Icon(
                   Icons.person_rounded,
                   color: Colors.black,

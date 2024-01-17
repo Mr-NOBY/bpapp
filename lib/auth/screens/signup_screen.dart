@@ -1,3 +1,4 @@
+import 'package:bpapp/controller/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'login_screen.dart';
@@ -5,8 +6,11 @@ import 'login_screen.dart';
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignUpController());
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -23,12 +27,14 @@ class SignupScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Form(
+                  key: formKey,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          controller: controller.name,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.person_outline_outlined),
                             labelText: 'Name',
@@ -40,6 +46,7 @@ class SignupScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: controller.email,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.email_outlined),
                             labelText: 'Email',
@@ -51,6 +58,7 @@ class SignupScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: controller.password,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             labelText: 'Password',
@@ -68,7 +76,13 @@ class SignupScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                SignUpController.instance.registerUser(
+                                    controller.email.text.trim(),
+                                    controller.password.text.trim());
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(),
                               side: const BorderSide(color: Colors.black),

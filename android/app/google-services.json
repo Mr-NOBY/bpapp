@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "24956809392",
+    "project_id": "smart-biochip",
+    "storage_bucket": "smart-biochip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24956809392:android:8a86aa5e13b811ff46cb75",
+        "android_client_info": {
+          "package_name": "com.example.bpapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcU3WaRL46P8oL6BCuxfTqfIwkDfJPdJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
