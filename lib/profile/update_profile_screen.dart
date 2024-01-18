@@ -35,6 +35,14 @@ class UpdateProfileScreen extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   UserModel userData = snapshot.data as UserModel;
+
+                  final fullName =
+                      TextEditingController(text: userData.fullName);
+                  final email = TextEditingController(text: userData.email);
+                  final password =
+                      TextEditingController(text: userData.password);
+                  final id = TextEditingController(text: userData.id);
+
                   return Column(
                     children: [
                       Stack(
@@ -75,7 +83,7 @@ class UpdateProfileScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             TextFormField(
-                              initialValue: userData.fullName,
+                              controller: fullName,
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(Icons.person_outline_outlined),
                                 labelText: 'Name',
@@ -87,7 +95,7 @@ class UpdateProfileScreen extends StatelessWidget {
                               height: 20,
                             ),
                             TextFormField(
-                              initialValue: userData.email,
+                              controller: email,
                               keyboardType: TextInputType.emailAddress,
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(Icons.email_outlined),
@@ -100,7 +108,7 @@ class UpdateProfileScreen extends StatelessWidget {
                               height: 20,
                             ),
                             TextFormField(
-                              initialValue: userData.password,
+                              controller: password,
                               obscureText: true,
                               enableSuggestions: false,
                               autocorrect: false,
@@ -125,7 +133,14 @@ class UpdateProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.to(UpdateProfileScreen());
+                            final user = UserModel(
+                              fullName: fullName.text.trim(),
+                              email: email.text.trim(),
+                              password: password.text.trim(),
+                              id: id.text,
+                            );
+
+                            controller.updateRecord(user);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
