@@ -46,6 +46,7 @@ dependencies:
   flutter_otp_text_field: ^1.1.1
   firebase_core: ^2.24.2
   firebase_auth: ^4.16.0
+  line_awesome_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ flutter:
     - assets/images/google.png
     - assets/images/reset.png
     - assets/images/otp.png
+    - assets/images/user.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

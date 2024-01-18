@@ -2,6 +2,7 @@
 
 import 'package:bpapp/auth/screens/welcome_screen.dart';
 import 'package:bpapp/firebase_options.dart';
+import 'package:bpapp/profile/profile_screen.dart';
 import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey[200]),
             child: IconButton(
                 onPressed: () {
-                  AuthRepo.instance.logout();
+                  // AuthRepo.instance.logout();
+                  Get.to(ProfileScreen());
                 },
                 icon: Icon(
                   Icons.person_rounded,
