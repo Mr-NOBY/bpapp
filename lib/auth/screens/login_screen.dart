@@ -3,12 +3,16 @@ import 'package:bpapp/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../main.dart';
+import '../../controller/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -25,12 +29,15 @@ class LoginScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Form(
+                  key: formKey,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          controller: controller.email,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.email_outlined),
                             labelText: 'Email',
@@ -42,6 +49,10 @@ class LoginScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: controller.password,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             labelText: 'Password',
@@ -67,7 +78,11 @@ class LoginScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              Get.to(() => MyHomePage(title: 'Smart BioChip'));
+                              if (formKey.currentState!.validate()) {
+                                LoginController.instance.loginUser(
+                                    controller.email.text.trim(),
+                                    controller.password.text.trim());
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(),

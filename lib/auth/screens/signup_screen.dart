@@ -46,6 +46,7 @@ class SignupScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: controller.email,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.email_outlined),
@@ -59,6 +60,9 @@ class SignupScreen extends StatelessWidget {
                         ),
                         TextFormField(
                           controller: controller.password,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             labelText: 'Password',
