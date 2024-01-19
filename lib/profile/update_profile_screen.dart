@@ -174,7 +174,7 @@ class UpdateProfileScreen extends StatelessWidget {
                             AuthRepo.instance
                                 .reAuthUser(user.email, user.password);
                             AuthRepo.instance.deleteUser();
-                            // UserRepo.instance.deleteUser(user);
+                            UserRepo.instance.deleteUser(user);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
