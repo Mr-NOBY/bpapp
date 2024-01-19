@@ -51,4 +51,8 @@ class UserRepo extends GetxController {
   Future<void> updateUserRecord(UserModel user) async {
     await _dp.collection("Users").doc(user.id).update(user.toJson());
   }
+
+  Future deleteUser(UserModel user) async {
+    await _dp.collection("Users").doc(user.id).delete();
+  }
 }

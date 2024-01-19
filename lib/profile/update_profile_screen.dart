@@ -1,5 +1,7 @@
 import 'package:bpapp/controller/profile_controller.dart';
 import 'package:bpapp/models/user_model.dart';
+import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
+import 'package:bpapp/repositroy/user_repository/user_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -161,7 +163,19 @@ class UpdateProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            final user = UserModel(
+                              fullName: fullName.text.trim(),
+                              email: email.text.trim(),
+                              password: password.text.trim(),
+                              id: id.text,
+                            );
+
+                            AuthRepo.instance
+                                .reAuthUser(user.email, user.password);
+                            AuthRepo.instance.deleteUser();
+                            // UserRepo.instance.deleteUser(user);
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
                             side: BorderSide.none,

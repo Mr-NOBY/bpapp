@@ -52,4 +52,24 @@ class AuthRepo extends GetxController {
   }
 
   Future<void> logout() async => await _auth.signOut();
+
+  Future<void> reAuthUser(String email, String password) async {
+    try {
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: password);
+      await _auth.currentUser?.reauthenticateWithCredential(credential);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await _auth.currentUser!.delete();
+    } catch (e) {
+      print(e.toString());
+    }
+    Get.offAll(const WelcomeScreen());
+    Get.snackbar("User Deleted", "your account has been deleted successfully.");
+  }
 }
