@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 LoginController.instance.loginUser(
-                                    controller.email.text.trim(),
+                                    controller.email.text.trim().toLowerCase(),
                                     controller.password.text.trim());
                               }
                             },

@@ -137,7 +137,7 @@ class UpdateProfileScreen extends StatelessWidget {
                           onPressed: () {
                             final user = UserModel(
                               fullName: fullName.text.trim(),
-                              email: email.text.trim(),
+                              email: email.text.trim().toLowerCase(),
                               password: password.text.trim(),
                               id: id.text,
                             );
