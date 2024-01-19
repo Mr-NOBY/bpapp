@@ -2,6 +2,7 @@ import 'package:bpapp/auth/screens/welcome_screen.dart';
 import 'package:bpapp/repositroy/auth_repository/exceptions/signup_email_password_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../main.dart';
 
@@ -16,10 +17,10 @@ class AuthRepo extends GetxController {
     Future.delayed(const Duration(seconds: 6));
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
+    ever(firebaseUser, setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
+  setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => const WelcomeScreen())
         : Get.offAll(() => MyHomePage(title: 'Smart BioChip'));
@@ -51,7 +52,10 @@ class AuthRepo extends GetxController {
     } catch (_) {}
   }
 
-  Future<void> logout() async => await _auth.signOut();
+  Future<void> logout() async {
+    await GoogleSignIn().signOut();
+    await _auth.signOut();
+  }
 
   Future<void> reAuthUser(String email, String password) async {
     try {
@@ -65,11 +69,35 @@ class AuthRepo extends GetxController {
 
   Future<void> deleteUser() async {
     try {
+      // await GoogleSignIn().currentUser!.
       await _auth.currentUser!.delete();
     } catch (e) {
       print(e.toString());
     }
     Get.offAll(const WelcomeScreen());
     Get.snackbar("User Deleted", "your account has been deleted successfully.");
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
   }
 }

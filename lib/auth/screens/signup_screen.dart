@@ -1,3 +1,4 @@
+import 'package:bpapp/controller/login_controller.dart';
 import 'package:bpapp/controller/signup_controller.dart';
 import 'package:bpapp/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
+    final googleController = Get.put(LoginController());
 
     return SafeArea(
       child: Scaffold(
@@ -114,7 +116,9 @@ class SignupScreen extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  LoginController.instance.googleLogin();
+                                },
                                 icon: const Image(
                                   image: AssetImage('assets/images/google.png'),
                                   width: 20,

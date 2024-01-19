@@ -104,7 +104,9 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  LoginController.instance.googleLogin();
+                                },
                                 icon: const Image(
                                   image: AssetImage('assets/images/google.png'),
                                   width: 20,
