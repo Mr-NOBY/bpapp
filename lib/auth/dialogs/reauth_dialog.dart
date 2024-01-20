@@ -22,44 +22,47 @@ class _ReauthDialogState extends State<ReauthDialog> {
           style: Theme.of(context).textTheme.headlineMedium),
       content: Form(
         key: ReauthDialog.formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              controller: controller.email,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined),
-                labelText: 'Current Email',
-                hintText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: controller.password,
-              obscureText: !isPasswordVisible,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock_outline),
-                labelText: 'Password',
-                hintText: 'Password',
-                border: OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isPasswordVisible = !isPasswordVisible;
-                    });
-                  },
-                  icon: Icon(isPasswordVisible
-                      ? Icons.visibility_off
-                      : Icons.visibility),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            children: [
+              TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                controller: controller.email,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.email_outlined),
+                  labelText: 'Current Email',
+                  hintText: 'Email',
+                  border: OutlineInputBorder(),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: controller.password,
+                obscureText: !isPasswordVisible,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.lock_outline),
+                  labelText: 'Password',
+                  hintText: 'Password',
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                    icon: Icon(isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
