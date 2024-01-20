@@ -5,10 +5,17 @@ import 'package:get/get.dart';
 
 import '../../controller/login_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
@@ -29,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Form(
-                  key: formKey,
+                  key: LoginScreen.formKey,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
@@ -50,17 +57,23 @@ class LoginScreen extends StatelessWidget {
                         ),
                         TextFormField(
                           controller: controller.password,
-                          obscureText: true,
+                          obscureText: !isPasswordVisible,
                           enableSuggestions: false,
                           autocorrect: false,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             labelText: 'Password',
                             hintText: 'Password',
                             border: OutlineInputBorder(),
                             suffixIcon: IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.remove_red_eye_sharp),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                              icon: Icon(isPasswordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                             ),
                           ),
                         ),
@@ -78,7 +91,8 @@ class LoginScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
+                              if (LoginScreen.formKey.currentState!
+                                  .validate()) {
                                 LoginController.instance.loginUser(
                                     controller.email.text.trim().toLowerCase(),
                                     controller.password.text.trim());

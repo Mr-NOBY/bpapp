@@ -120,10 +120,10 @@ class UpdateProfileScreen extends StatelessWidget {
                                 labelText: 'Password',
                                 hintText: 'Password',
                                 border: OutlineInputBorder(),
-                                suffixIcon: IconButton(
-                                  onPressed: null,
-                                  icon: Icon(Icons.remove_red_eye_sharp),
-                                ),
+                                // suffixIcon: IconButton(
+                                //   onPressed: null,
+                                //   icon: Icon(Icons.remove_red_eye_sharp),
+                                // ),
                               ),
                             ),
                           ],

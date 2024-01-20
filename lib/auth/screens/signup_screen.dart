@@ -5,10 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'login_screen.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
@@ -30,7 +37,7 @@ class SignupScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Form(
-                  key: formKey,
+                  key: SignupScreen.formKey,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
@@ -63,17 +70,23 @@ class SignupScreen extends StatelessWidget {
                         ),
                         TextFormField(
                           controller: controller.password,
-                          obscureText: true,
+                          obscureText: !isPasswordVisible,
                           enableSuggestions: false,
                           autocorrect: false,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             labelText: 'Password',
                             hintText: 'Password',
                             border: OutlineInputBorder(),
                             suffixIcon: IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.remove_red_eye_sharp),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                              icon: Icon(isPasswordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                             ),
                           ),
                         ),
@@ -84,7 +97,8 @@ class SignupScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
+                              if (SignupScreen.formKey.currentState!
+                                  .validate()) {
                                 // SignUpController.instance.registerUser(
                                 //     controller.email.text.trim(),
                                 //     controller.password.text.trim());
