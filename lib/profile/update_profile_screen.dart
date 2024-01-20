@@ -1,3 +1,4 @@
+import 'package:bpapp/auth/dialogs/reauth_dialog.dart';
 import 'package:bpapp/controller/profile_controller.dart';
 import 'package:bpapp/models/user_model.dart';
 import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
@@ -163,7 +164,7 @@ class UpdateProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             final user = UserModel(
                               fullName: fullName.text.trim(),
                               email: email.text.trim(),
@@ -171,8 +172,8 @@ class UpdateProfileScreen extends StatelessWidget {
                               id: id.text,
                             );
 
-                            AuthRepo.instance
-                                .reAuthUser(user.email, user.password);
+                            await Get.dialog(const ReauthDialog());
+                            Get.until((_) => !Get.isDialogOpen!);
                             AuthRepo.instance.deleteUser();
                             UserRepo.instance.deleteUser(user);
                           },
