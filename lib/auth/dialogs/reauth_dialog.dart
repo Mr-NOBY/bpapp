@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReauthDialog extends StatefulWidget {
-  const ReauthDialog({super.key});
+  const ReauthDialog({super.key, required this.usage});
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final VoidCallback usage;
+
+  const ReauthDialog.functions({super.key, required this.usage});
 
   @override
   State<ReauthDialog> createState() => _ReauthDialogState();
@@ -76,6 +80,7 @@ class _ReauthDialogState extends State<ReauthDialog> {
                       controller.email.text.trim().toLowerCase(),
                       controller.password.text.trim());
                   Get.back();
+                  widget.usage();
                 } catch (e) {
                   print(e);
                 }

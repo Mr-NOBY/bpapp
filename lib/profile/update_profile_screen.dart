@@ -172,10 +172,15 @@ class UpdateProfileScreen extends StatelessWidget {
                               id: id.text,
                             );
 
-                            await Get.dialog(const ReauthDialog());
-                            Get.until((_) => !Get.isDialogOpen!);
-                            AuthRepo.instance.deleteUser();
-                            UserRepo.instance.deleteUser(user);
+                            await Get.dialog(ReauthDialog(
+                              usage: () {
+                                AuthRepo.instance.deleteUser();
+                                UserRepo.instance.deleteUser(user);
+                              },
+                            ));
+                            // Get.until((_) => !Get.isDialogOpen!);
+                            // AuthRepo.instance.deleteUser();
+                            // UserRepo.instance.deleteUser(user);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
