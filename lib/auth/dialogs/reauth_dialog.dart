@@ -79,11 +79,16 @@ class _ReauthDialogState extends State<ReauthDialog> {
                   ReauthController.instance.reauthUser(
                       controller.email.text.trim().toLowerCase(),
                       controller.password.text.trim());
-                  Get.back();
-                  widget.usage();
                 } catch (e) {
                   print(e);
                 }
+              }
+
+              if (ReauthController.instance.isReAuth.isTrue) {
+                Get.back();
+                widget.usage();
+              } else {
+                Get.snackbar("Error", "Please check your credentials.");
               }
             },
             style: ElevatedButton.styleFrom(
