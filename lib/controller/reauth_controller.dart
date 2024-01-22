@@ -8,12 +8,14 @@ class ReauthController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   RxBool isReAuth = false.obs;
+  // bool isReAuth = false;
 
-  void reauthUser(String email, String password) async {
+  Future<void> reauthUser(String email, String password) async {
     try {
-      await AuthRepo.instance.reAuthUser(email, password);
-      isReAuth.value = true;
+      bool success = await AuthRepo.instance.reAuthUser(email, password);
+      isReAuth.value = success;
     } catch (e) {
+      // isReAuth.value = false;
       isReAuth.value = false;
     }
     // isReAuth = true;

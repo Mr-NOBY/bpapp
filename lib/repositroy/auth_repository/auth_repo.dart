@@ -57,13 +57,15 @@ class AuthRepo extends GetxController {
     await _auth.signOut();
   }
 
-  Future<void> reAuthUser(String email, String password) async {
+  Future<bool> reAuthUser(String email, String password) async {
     try {
       AuthCredential credential =
           EmailAuthProvider.credential(email: email, password: password);
       await _auth.currentUser?.reauthenticateWithCredential(credential);
+      return true;
     } catch (e) {
       print(e.toString());
+      return false;
     }
   }
 

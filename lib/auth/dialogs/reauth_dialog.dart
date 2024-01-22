@@ -73,21 +73,21 @@ class _ReauthDialogState extends State<ReauthDialog> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (ReauthDialog.formKey.currentState!.validate()) {
-                try {
-                  ReauthController.instance.reauthUser(
-                      controller.email.text.trim().toLowerCase(),
-                      controller.password.text.trim());
-                } catch (e) {
-                  print(e);
-                }
+                // try {
+                await ReauthController.instance.reauthUser(
+                    controller.email.text.trim().toLowerCase(),
+                    controller.password.text.trim());
+                // } catch (e) {
+                //   print(e);
+                // }
               }
-
               if (ReauthController.instance.isReAuth.isTrue) {
                 Get.back();
                 widget.usage();
               } else {
+                Get.back();
                 Get.snackbar("Error", "Please check your credentials.");
               }
             },
