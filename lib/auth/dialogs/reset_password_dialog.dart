@@ -13,26 +13,29 @@ class PasswordReset extends StatelessWidget {
     return AlertDialog(
       title: Text('Reset Password',
           style: Theme.of(context).textTheme.headlineMedium),
-      content: Form(
-        key: PasswordReset.formKey,
-        child: SizedBox(
-          height: 150,
-          child: Column(
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: controller.email,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
-                  labelText: 'Current Email',
-                  hintText: 'Email',
-                  border: OutlineInputBorder(),
+      content: SizedBox(
+        height: 100,
+        child: Form(
+          key: PasswordReset.formKey,
+          child: SizedBox(
+            height: 150,
+            child: Column(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: controller.email,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email_outlined),
+                    labelText: 'Current Email',
+                    hintText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
         ),
       ),
