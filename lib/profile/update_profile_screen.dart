@@ -135,7 +135,7 @@ class UpdateProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             final user = UserModel(
                               fullName: fullName.text.trim(),
                               email: email.text.trim().toLowerCase(),
@@ -143,7 +143,11 @@ class UpdateProfileScreen extends StatelessWidget {
                               id: id.text,
                             );
 
-                            controller.updateRecord(user);
+                            await Get.dialog(ReauthDialog(
+                              usage: () {
+                                controller.updateRecord(user);
+                              },
+                            ));
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
@@ -174,8 +178,7 @@ class UpdateProfileScreen extends StatelessWidget {
 
                             await Get.dialog(ReauthDialog(
                               usage: () {
-                                AuthRepo.instance.deleteUser();
-                                UserRepo.instance.deleteUser(user);
+                                controller.deleteUser(user);
                               },
                             ));
                             // Get.until((_) => !Get.isDialogOpen!);

@@ -20,6 +20,12 @@ class ProfileController extends GetxController {
   }
 
   updateRecord(UserModel user) async {
+    await _authRepo.updateEmail(user.email);
     await _userRepo.updateUserRecord(user);
+  }
+
+  deleteUser(UserModel user) async {
+    await AuthRepo.instance.deleteUser();
+    await UserRepo.instance.deleteUser(user);
   }
 }

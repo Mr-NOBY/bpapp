@@ -69,6 +69,14 @@ class AuthRepo extends GetxController {
     }
   }
 
+  Future<void> updateEmail(String newEmail) async {
+    try {
+      await _auth.currentUser!.updateEmail(newEmail);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<void> deleteUser() async {
     try {
       // await GoogleSignIn().currentUser!.
