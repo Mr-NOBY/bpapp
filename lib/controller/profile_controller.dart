@@ -21,6 +21,7 @@ class ProfileController extends GetxController {
 
   updateRecord(UserModel user) async {
     await _authRepo.updateEmail(user.email);
+    await _authRepo.updatePassword(user.password);
     await _userRepo.updateUserRecord(user);
   }
 
