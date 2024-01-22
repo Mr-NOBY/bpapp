@@ -10,6 +10,10 @@ class ProfileController extends GetxController {
   final _authRepo = Get.put(AuthRepo());
   final _userRepo = Get.put(UserRepo());
 
+  final email = TextEditingController();
+
+  RxBool isSent = false.obs;
+
   getUserData() {
     final email = _authRepo.firebaseUser.value?.email;
     if (email != null) {
@@ -28,5 +32,15 @@ class ProfileController extends GetxController {
   deleteUser(UserModel user) async {
     await AuthRepo.instance.deleteUser();
     await UserRepo.instance.deleteUser(user);
+  }
+
+  resetPassword(String email) async {
+    try {
+      bool sent = await AuthRepo.instance.resetPassword(email);
+      isSent.value = sent;
+    } catch (e) {
+      isSent.value = false;
+      print(e.toString());
+    }
   }
 }

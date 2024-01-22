@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/login_controller.dart';
+import '../dialogs/reset_password_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -83,8 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                              onPressed: () =>
-                                  Get.to(() => const ForgotPasswordScreen()),
+                              onPressed: () => Get.to(
+                                  () => Get.dialog(const PasswordReset())),
                               child: const Text('Forgot Password?')),
                         ),
                         SizedBox(

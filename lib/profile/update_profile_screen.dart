@@ -1,4 +1,5 @@
 import 'package:bpapp/auth/dialogs/reauth_dialog.dart';
+import 'package:bpapp/auth/dialogs/reset_password_dialog.dart';
 import 'package:bpapp/controller/profile_controller.dart';
 import 'package:bpapp/models/user_model.dart';
 import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
@@ -125,6 +126,13 @@ class UpdateProfileScreen extends StatelessWidget {
                                 //   icon: Icon(Icons.remove_red_eye_sharp),
                                 // ),
                               ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                  onPressed: () =>
+                                      Get.dialog(const PasswordReset()),
+                                  child: const Text('Forgot Password?')),
                             ),
                           ],
                         ),
