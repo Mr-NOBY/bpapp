@@ -1,12 +1,16 @@
+import '../../controller/profile_controller.dart';
 import './otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ProfileController());
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -38,9 +42,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ],
                 ),
                 Form(
+                  key: formKey,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: TextFormField(
+                      controller: controller.email,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.email_outlined),
                         labelText: 'Email',
@@ -53,8 +59,20 @@ class ForgotPasswordScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => const OtpScreen());
+                    onPressed: () async {
+                      if (ForgotPasswordScreen.formKey.currentState!
+                          .validate()) {
+                        await ProfileController.instance.resetPassword(
+                            controller.email.text.trim().toLowerCase());
+
+                        if (ProfileController.instance.isSent.isTrue) {
+                          Get.back();
+                          Get.snackbar("Sent!", "Please check your inbox.");
+                        } else {
+                          Get.snackbar("Error", "Wrong Email!");
+                        }
+                      }
+                      ;
                     },
                     style: ElevatedButton.styleFrom(
                       shape: const RoundedRectangleBorder(),
