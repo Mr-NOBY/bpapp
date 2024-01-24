@@ -1,5 +1,6 @@
 import 'package:bpapp/auth/screens/welcome_screen.dart';
 import 'package:bpapp/repositroy/auth_repository/exceptions/signup_email_password_failure.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,6 +12,9 @@ class AuthRepo extends GetxController {
 
   final _auth = FirebaseAuth.instance;
   late Rx<User?> firebaseUser;
+  late EmailAuth emailAuth = EmailAuth(
+    sessionName: "Sample session",
+  );
 
   @override
   void onReady() {
@@ -50,6 +54,22 @@ class AuthRepo extends GetxController {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
     } catch (_) {}
+  }
+
+  void send() {}
+
+  Future<bool> sendOTP(String email) async {
+    try {
+      await emailAuth.sendOtp(recipientMail: email, otpLength: 6);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> verifyOTP(String email, String otp) async {
+    return emailAuth.validateOtp(recipientMail: email, userOtp: otp);
   }
 
   Future<void> logout() async {

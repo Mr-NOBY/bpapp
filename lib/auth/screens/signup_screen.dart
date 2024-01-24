@@ -1,3 +1,4 @@
+import 'package:bpapp/auth/screens/otp_screen.dart';
 import 'package:bpapp/controller/login_controller.dart';
 import 'package:bpapp/controller/signup_controller.dart';
 import 'package:bpapp/models/user_model.dart';
@@ -110,6 +111,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     password: controller.password.text.trim());
 
                                 SignUpController.instance.createUser(user);
+                                // SignUpController.instance.sendOTP(user.email);
+                                // Get.to(OtpScreen(user: user));
                               }
                             },
                             style: ElevatedButton.styleFrom(

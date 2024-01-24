@@ -1,9 +1,27 @@
+import 'package:bpapp/repositroy/auth_repository/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 
+import '../../controller/signup_controller.dart';
+import '../../models/user_model.dart';
+
 class OtpScreen extends StatelessWidget {
-  const OtpScreen({super.key});
+  final UserModel user;
+  final TextEditingController otpController = TextEditingController();
+
+  OtpScreen({
+    super.key,
+    required this.user,
+  });
+
+  void onSub(String otp) async {
+    if (await AuthRepo.instance.verifyOTP(user.email, otp) == true) {
+      SignUpController.instance.createUser(user);
+    } else {
+      Get.snackbar("Incorrect OTP", "Please, recheck your OTP");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +49,7 @@ class OtpScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Text(
-                'Enter the verification code sent to your email',
+                'Enter the verification code sent to ${user.email}',
                 style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
@@ -39,12 +57,13 @@ class OtpScreen extends StatelessWidget {
                 height: 10,
               ),
               OtpTextField(
+                handleControllers: (controllers) => otpController,
                 numberOfFields: 6,
                 fillColor: Colors.black.withOpacity(0.1),
                 filled: true,
                 focusedBorderColor: Colors.black,
                 onSubmit: (code) {
-                  print('OTP is => $code');
+                  onSub(code);
                 },
               ),
               const SizedBox(
@@ -54,7 +73,7 @@ class OtpScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Get.to(() => const OtpScreen());
+                    onSub(otpController.text);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(),

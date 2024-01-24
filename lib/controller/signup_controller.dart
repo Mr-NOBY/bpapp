@@ -21,4 +21,8 @@ class SignUpController extends GetxController {
     await userRepository.createUser(user);
     registerUser(user.email, user.password);
   }
+
+  void sendOTP(String email) {
+    AuthRepo.instance.sendOTP(email);
+  }
 }
